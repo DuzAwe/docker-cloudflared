@@ -42,7 +42,7 @@ LABEL maintainer="CrazyMax" \
 ENV TZ="UTC" \
   TUNNEL_METRICS="0.0.0.0:49312" \
   TUNNEL_DNS_ADDRESS="0.0.0.0" \
-  TUNNEL_DNS_PORT="5053" \
+  TUNNEL_DNS_PORT="53" \
   TUNNEL_DNS_UPSTREAM="https://1.1.1.1/dns-query,https://1.0.0.1/dns-query"
 
 RUN apk --update --no-cache add \
@@ -60,11 +60,11 @@ RUN cloudflared --version
 
 USER cloudflared
 
-EXPOSE 5053/udp
+EXPOSE 53/udp
 EXPOSE 49312/tcp
 
 ENTRYPOINT [ "/usr/local/bin/cloudflared" ]
 CMD [ "proxy-dns" ]
 
 HEALTHCHECK --interval=30s --timeout=20s --start-period=10s \
-  CMD dig +short @127.0.0.1 -p 5053 cloudflare.com A || exit 1
+  CMD dig +short @127.0.0.1 -p 53 cloudflare.com A || exit 1
